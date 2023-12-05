@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Board.h"
 #include "RecursiveSolver.h"
+#include "Creator.h"
 
 
 int main() {
@@ -11,10 +12,18 @@ int main() {
     Board hassen("...6..4..7....36......91.8...........5.18...3...3.6.45.4.2...6.9.3.......2....1..");
     Board empty (".................................................................................");
     Board master(".37.8.5.9..6.........1..8..6...3.....534...7.1.......5.....2.4..98.1...75........");
+    Board wrong("337.8.5.9..6.........1..8..6...3.....534...7.1.......5.....2.4..98.1...75........");
 
-    RecursiveSolver rSolver(clue17);
+    RecursiveSolver rSolver(wrong);
     rSolver.show();
-    rSolver.solveSudoku();
+    rSolver.solveSudoku(false); //solver runs faster with randomness turned off (isRandom = false)
+    std::cout << rSolver.solutions << std::endl;
+
+    Board custom = Creator::create();
+    Board reduced = Creator::subtract(80, custom);
+    RecursiveSolver solver(reduced);
+    solver.solveSudoku(false);
+
     return 0;
 
 }

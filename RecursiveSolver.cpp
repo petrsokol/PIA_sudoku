@@ -7,10 +7,12 @@
 #include <random>
 #include <utility>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 RecursiveSolver::RecursiveSolver(Board board) {
+    solutions = 0;
     RecursiveSolver::board = std::move(board);
     for (int r = 0; r < 9; ++r) {
         for (int c = 0; c < 9; ++c) {
@@ -41,13 +43,24 @@ pair<int, int> RecursiveSolver::nextEmptyPos(int r, int c) {
     return {9,0};
 }
 
-bool RecursiveSolver::solve(int rStart, int cStart) {
+bool RecursiveSolver::solve(int rStart, int cStart, bool isRandom) {
+    // Create a vector with initial values
+    std::vector<int> vec{0, 1, 2, 3, 4, 5, 6, 7, 8};
+
+    if (isRandom) {
+        // Use a random number generator engine to shuffle the vector
+        std::random_device rd;
+        std::mt19937 g(rd());
+
+        std::shuffle(vec.begin(), vec.end(), g);
+    }
+
     auto [r, c] = nextEmptyPos(rStart, cStart);
     if (r == 9) {
         solutions++;
         cout << endl << "found solution " << solutions << "/x" << endl;
-        show();
-        if (solutions > 10) { //does not generate more than 10 solutions
+//        show();
+        if (isRandom || solutions > 10) {
             return true;
         }
     }
@@ -57,13 +70,13 @@ bool RecursiveSolver::solve(int rStart, int cStart) {
     if (contains.all()) {return false;}
 
     for (int digit = 0; digit < 9; ++digit) {
-        if(!contains[digit]) {
-            board.set(r, c, digit+1);
-            updatePos(r, c, digit);
-            if (solve(r, c)) {
+        if (!contains[vec[digit]]) {
+            board.set(r, c, vec[digit] + 1);
+            updatePos(r, c, vec[digit]);
+            if (solve(r, c, isRandom)) {
                 return true;
             }
-            undoPos(r, c, digit);
+            undoPos(r, c, vec[digit]);
         }
     }
     board.set(r, c, 0);
@@ -108,15 +121,28 @@ int RecursiveSolver::getCell(int r, int c) {
     return (r / 3) * 3 + c / 3;
 }
 
-void RecursiveSolver::solveSudoku() {
-    solve(0,0);
-    if (solutions == 0) {
-        cout << "this sudoku does not have a solution." << endl;
-    } else if (solutions == 1) {
-        cout << "this sudoku has a unique solution." << endl;
-    } else if (solutions <= 10) {
-        cout << "this sudoku has " << solutions << " solutions." << endl;
-    } else {
-        cout << "this sudoku has more than 10 solutions." << endl;
+void RecursiveSolver::solveSudoku(bool isRandom) {
+    solve(0, 0, isRandom);
+    if (!isRandom) {
+        if (solutions == 0) {
+            cout << "this sudoku does not have a solution." << endl;
+        } else if (solutions == 1) {
+            cout << "this sudoku has a unique solution." << endl;
+        } else if (solutions <= 10) {
+            cout << "this sudoku has " << solutions << " solutions." << endl;
+        } else {
+            cout << "this sudoku has more than 10 solutions." << endl;
+        }
     }
 }
+
+/**
+ * create() method starts with an empty board and fills it randomly within constraints.
+ */
+Board RecursiveSolver::create() {
+    Board empty(".................................................................................");
+    RecursiveSolver solver(empty);
+    solver.solveSudoku(true);
+    return solver.board;
+}
+

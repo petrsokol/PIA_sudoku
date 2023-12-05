@@ -7,4 +7,6 @@ add_executable(PIA_sudoku main.cpp
         Board.cpp
         Board.h
         RecursiveSolver.cpp
-        RecursiveSolver.h)
+        RecursiveSolver.h
+        Creator.cpp
+        Creator.h)

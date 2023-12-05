@@ -18,11 +18,15 @@ class RecursiveSolver {
 public:
     explicit RecursiveSolver(Board board);
     void show();
-    void solveSudoku();
-private:
-    bool solve(int rStart, int cStart);
+    void solveSudoku(bool isRandom);
 
     Board board;
+
+    static Board create();
+    int solutions;
+
+private:
+    bool solve(int rStart, int cStart, bool isRandom);
 
     array<bitset<9>, 9> rows = {0};
     array<bitset<9>, 9> cols = {0};
@@ -35,8 +39,6 @@ private:
 
     void updatePos(int r, int c, int digit);
     void undoPos(int r, int c, int digit);
-
-    int solutions = 0;
 };
 
 
