@@ -1,0 +1,6 @@
+# ninja log v5
+1	161	7234686776119346	build.ninja	d7e700142f56eae8
+11	957	7234686822395076	CMakeFiles/PIA_sudoku.dir/main.cpp.obj	f3f4e0e7132806cb
+4	966	7234686822486323	CMakeFiles/PIA_sudoku.dir/Board.cpp.obj	2dc759dcd83b91ab
+0	1084	7234686823684018	CMakeFiles/PIA_sudoku.dir/RecursiveSolver.cpp.obj	6482c279a08c802e
+1085	1236	7234686825147243	PIA_sudoku.exe	ce34358f57e46531
