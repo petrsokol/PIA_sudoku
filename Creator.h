@@ -8,6 +8,9 @@
 
 #include "Board.h"
 
+/**
+ * A class for creating sudoku problems for people to solve
+ */
 class Creator {
 
 public:

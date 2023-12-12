@@ -6,8 +6,16 @@
 
 #include <utility>
 #include <random>
+#include <iostream>
 #include "RecursiveSolver.h"
 
+/**
+ * creates a random filled (completed) sudoku board - a starting point for sudoku setting.
+ *
+ * The algorithm proceeds to take away squares until the solution is no longer unique, at which point it stops.
+ *
+ * @return a full valid board of numbers assorted randomly according to rules
+ */
 Board Creator::create() {
     Board empty(".................................................................................");
     RecursiveSolver solver(empty);
@@ -15,6 +23,16 @@ Board Creator::create() {
     return solver.board;
 }
 
+/**
+ * Takes a sudoku board (usually created by a method Creator::create()) and takes away numbers until the solution for
+ * this given board is no longer unique
+ *
+ * @param n maximum number of subtractions
+ * @param board sudoku board which is to be reduced to a unique solution
+ * @return returns a partially filled sudoku board which has a guaranteed unique solution
+ *
+ * @author Péťa Sokol
+ */
 Board Creator::subtract(int n, Board board) {
     bool unique = check(board);
     int subtractions = 0;
@@ -38,11 +56,17 @@ Board Creator::subtract(int n, Board board) {
             last = board;
         }
     }
-    RecursiveSolver solver(board);
+    RecursiveSolver solver(last);
     solver.show();
+    std::cout << "subtracted " << subtractions << " numbers \n";
     return last;
 }
 
+/**
+ * Checks if the given sudoku board has a unique solution or not
+ * @param board board, which you want to check for its unique solution
+ * @return true: given sudoku board has a single unique solution
+ */
 bool Creator::check(Board board) {
     RecursiveSolver solver(std::move(board));
     solver.solveSudoku(false);

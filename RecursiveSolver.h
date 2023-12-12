@@ -22,7 +22,6 @@ public:
 
     Board board;
 
-    static Board create();
     int solutions;
 
 private:
